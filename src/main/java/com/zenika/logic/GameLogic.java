@@ -1,8 +1,6 @@
 package com.zenika.logic;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameLogic {
     private int ballX = 400, ballY = 70, ballDX = 2, ballDY = 2;
@@ -14,23 +12,14 @@ public class GameLogic {
     private final int paddleHeight = paddleYEnd - paddleYStart;
     private final int panelWidth;
     private final int panelHeight;
-    private final List<Rectangle> bricks;
+    private final BricksLogic bricksLogic;
     private int score;
 
-    public GameLogic(int panelWidth, int panelHeight) {
+    public GameLogic(int panelWidth, int panelHeight, BricksLogic bricksLogic) {
         this.panelWidth = panelWidth;
         this.panelHeight = panelHeight;
-        this.bricks = new ArrayList<>();
+        this.bricksLogic = bricksLogic;
         this.score = 0;
-        initializeBricks();
-    }
-
-    private void initializeBricks() {
-        int brickWidth = 60;
-        int brickHeight = 20;
-        for (int i = 0; i < panelWidth / brickWidth; i += 2) {
-            bricks.add(new Rectangle(i * brickWidth, 50, brickWidth, brickHeight));
-        }
     }
 
     public void update() throws EndGameException {
@@ -40,6 +29,7 @@ public class GameLogic {
         if (ballX <= 0 || ballX >= panelWidth - 20) {
             ballDX = -ballDX;
         }
+
         if (ballY <= 0) {
             ballDY = -ballDY;
         }
@@ -48,22 +38,14 @@ public class GameLogic {
             ballDY = -ballDY;
         }
 
-        for (int i = 0; i < bricks.size(); i++) {
-            if (new Rectangle(ballX, ballY, 20, 20).intersects(bricks.get(i))) {
-                bricks.remove(i);
-                ballDY = -ballDY;
-                score += 10;
-                break;
-            }
+        if (bricksLogic.checkCollision(new Rectangle(ballX, ballY, 20, 20))) {
+            ballDY = -ballDY;
+            score += 10;
         }
 
         if (ballY >= panelHeight - 20) {
             looseGame();
         }
-    }
-
-    public List<Rectangle> getBricks() {
-        return bricks;
     }
 
     public int getScore() {
@@ -132,5 +114,9 @@ public class GameLogic {
 
     public int getBallDY() {
         return this.ballDY;
+    }
+
+    public BricksLogic getBricksLogic() {
+        return bricksLogic;
     }
 }
