@@ -42,6 +42,36 @@ class GameLogicTest {
     }
 
     @Test
+    @DisplayName("Should bounce ball off paddle")
+    void should_bounce_ball_off_paddle() throws EndGameException {
+        // Given
+        gameLogic.setBallX(350);
+        gameLogic.setBallY(540);
+        gameLogic.setBallDY(2);
+
+        // When
+        gameLogic.update();
+
+        // Then
+        assertEquals(-2, gameLogic.getBallDY());
+    }
+
+    @Test
+    @DisplayName("Should not bounce ball off paddle when not intersecting")
+    void should_not_bounce_ball_off_paddle_when_not_intersecting() throws EndGameException {
+        // Given
+        gameLogic.setBallX(0);
+        gameLogic.setBallY(0);
+        gameLogic.setBallDY(2);
+
+        // When
+        gameLogic.update();
+
+        // Then
+        assertEquals(2, gameLogic.getBallDY());
+    }
+
+    @Test
     @DisplayName("Should stop when paddle hits the left wall")
     void should_stop_when_paddle_hits_the_left_wall() {
         // Given
