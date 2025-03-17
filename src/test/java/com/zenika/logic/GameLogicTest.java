@@ -13,7 +13,8 @@ class GameLogicTest {
     private final int panelHeight = 600;
 
     // Tested component
-    private final GameLogic gameLogic = new GameLogic(panelWidth, panelHeight);
+    private final BricksLogic bricksLogic = new BricksLogic(panelWidth);
+    private final GameLogic gameLogic = new GameLogic(panelWidth, panelHeight, bricksLogic);
 
     @Test
     @DisplayName("Should move paddle left")
@@ -112,23 +113,23 @@ class GameLogicTest {
     @DisplayName("Should initialize bricks correctly")
     void should_initialize_bricks_correctly() {
         // Given & When & Then
-        assertEquals(7, gameLogic.getBricks().size());
+        assertEquals(7, bricksLogic.getBricks().size());
     }
 
     @Test
     @DisplayName("Should remove brick when ball hits")
     void should_remove_brick_when_ball_hits() throws EndGameException {
         // Given
-        gameLogic.setBallX(0);
+        gameLogic.setBallX(50);
         gameLogic.setBallY(50);
         gameLogic.setBallDY(2);
-        int initialBrickCount = gameLogic.getBricks().size();
+        int initialBrickCount = bricksLogic.getBricks().size();
 
         // When
         gameLogic.update();
 
         // Then
-        assertEquals(initialBrickCount - 1, gameLogic.getBricks().size());
+        assertEquals(initialBrickCount - 1, bricksLogic.getBricks().size());
     }
 
     @Test

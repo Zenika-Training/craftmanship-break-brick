@@ -1,5 +1,6 @@
 package com.zenika.ui;
 
+import com.zenika.logic.BricksLogic;
 import com.zenika.logic.EndGameException;
 import com.zenika.logic.GameLogic;
 
@@ -17,12 +18,14 @@ import java.awt.Rectangle;
 
 public class GamePanel extends JPanel implements ActionListener {
     private final GameLogic gameLogic;
+    private final BricksLogic bricksLogic;
 
     public GamePanel() {
         setBackground(Color.BLACK);
         setPreferredSize(new Dimension(800, 600));
         setFocusable(true);
-        gameLogic = new GameLogic(800, 600);
+        bricksLogic = new BricksLogic(800);
+        gameLogic = new GameLogic(800, 600, bricksLogic);
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -47,7 +50,7 @@ public class GamePanel extends JPanel implements ActionListener {
         g2d.fillRect(gameLogic.getPaddleX(), gameLogic.getPaddleY(), gameLogic.getPaddleWidth(), gameLogic.getPaddleHeight());
 
         g2d.setColor(Color.RED);
-        for (Rectangle brick : gameLogic.getBricks()) {
+        for (Rectangle brick : bricksLogic.getBricks()) {
             g2d.fillRect(brick.x, brick.y, brick.width, brick.height);
         }
 
