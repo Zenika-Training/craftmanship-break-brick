@@ -68,6 +68,11 @@ public class GameLogic {
         throw new EndGameException();
     }
 
+    public void resetGame() {
+        // TODO: Replace System.exit(0); with proper game reset logic
+        System.exit(0);
+    }
+
     public int getBallX() {
         return ballX;
     }
@@ -100,10 +105,6 @@ public class GameLogic {
         this.ballY = i;
     }
 
-    public void setBallDX(int i) {
-        this.ballDX = i;
-    }
-
     public void setBallDY(int i) {
         this.ballDY = i;
     }
@@ -116,7 +117,8 @@ public class GameLogic {
         return this.ballDY;
     }
 
-    public BricksLogic getBricksLogic() {
-        return bricksLogic;
+    public void setScore(int score) {
+        this.score = score;
     }
+
 }

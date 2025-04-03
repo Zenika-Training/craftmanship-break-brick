@@ -240,7 +240,7 @@ class GameLogicTest {
     }
 
     // Fake class for BricksLogic
-    class FakeBricksLogic extends BricksLogic {
+    static class FakeBricksLogic extends BricksLogic {
         public FakeBricksLogic() {
             super(800); // Assuming panelWidth is 800
         }
@@ -266,5 +266,66 @@ class GameLogicTest {
 
         // Then
         // No verification needed as dummy is not used
+    }
+
+    @Test
+    @DisplayName("Should reset game without exiting program")
+    void should_reset_game_without_exiting_program() {
+        // Given
+        GameLogic gameLogic = new GameLogic(panelWidth, panelHeight, bricksLogic);
+
+        // When
+        gameLogic.resetGame();
+
+        // Then
+        assertAll(
+                () -> assertEquals(400, gameLogic.getBallX()),
+                () -> assertEquals(70, gameLogic.getBallY()),
+                () -> assertEquals(0, gameLogic.getScore())
+        );
+    }
+
+    @Test
+    @DisplayName("Should reset ball position on resetGame")
+    void should_reset_ball_position_on_resetGame() {
+        // Given
+        GameLogic gameLogic = new GameLogic(panelWidth, panelHeight, bricksLogic);
+        gameLogic.setBallX(100);
+        gameLogic.setBallY(100);
+
+        // When
+        gameLogic.resetGame();
+
+        // Then
+        assertEquals(400, gameLogic.getBallX());
+        assertEquals(70, gameLogic.getBallY());
+    }
+
+    @Test
+    @DisplayName("Should reset paddle position on resetGame")
+    void should_reset_paddle_position_on_resetGame() {
+        // Given
+        GameLogic gameLogic = new GameLogic(panelWidth, panelHeight, bricksLogic);
+        gameLogic.setPaddleX(100);
+
+        // When
+        gameLogic.resetGame();
+
+        // Then
+        assertEquals(350, gameLogic.getPaddleX());
+    }
+
+    @Test
+    @DisplayName("Should reset score on resetGame")
+    void should_reset_score_on_resetGame() {
+        // Given
+        GameLogic gameLogic = new GameLogic(panelWidth, panelHeight, bricksLogic);
+        gameLogic.setScore(0);
+
+        // When
+        gameLogic.resetGame();
+
+        // Then
+        assertEquals(0, gameLogic.getScore());
     }
 }
