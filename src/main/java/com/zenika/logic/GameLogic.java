@@ -69,8 +69,12 @@ public class GameLogic {
     }
 
     public void resetGame() {
-        // TODO: Replace System.exit(0); with proper game reset logic
-        System.exit(0);
+        // Reset paddle position
+        this.setPaddleX(350);
+
+        // Reset ball position
+        this.setBallX(400);
+        this.setBallY(70);
     }
 
     public int getBallX() {
