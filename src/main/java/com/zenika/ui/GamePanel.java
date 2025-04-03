@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements ActionListener {
         try {
             gameLogic.update();
         } catch (EndGameException ex) {
-            System.exit(0);
+            gameLogic.resetGame();
         }
         repaint();
     }
