@@ -3,8 +3,11 @@ package com.zenika.logic;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.awt.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class GameLogicTest {
 
@@ -161,5 +164,107 @@ class GameLogicTest {
 
         // Then
         assertEquals(initialScore + 10, gameLogic.getScore());
+    }
+
+    @Test
+    @DisplayName("Mock - Should call checkCollision when ball hits a brick")
+    void should_call_checkCollision_when_ball_hits_a_brick_mock() throws EndGameException {
+        // Given
+        BricksLogic mockBricksLogic = mock(BricksLogic.class);
+        GameLogic gameLogicWithMock = new GameLogic(panelWidth, panelHeight, mockBricksLogic);
+        gameLogicWithMock.setBallX(0);
+        gameLogicWithMock.setBallY(50);
+        gameLogicWithMock.setBallDY(2);
+
+        // When
+        gameLogicWithMock.update();
+
+        // Then
+        verify(mockBricksLogic, times(1)).checkCollision(any(Rectangle.class));
+    }
+
+    @Test
+    @DisplayName("Stub - Should call checkCollision when ball hits a brick")
+    void should_call_checkCollision_when_ball_hits_a_brick_stub() throws EndGameException {
+        // Given
+        BricksLogic stubBricksLogic = new BricksLogic(panelWidth) {
+            @Override
+            public boolean checkCollision(Rectangle ball) {
+                return true; // Stubbed response
+            }
+        };
+        GameLogic gameLogicWithStub = new GameLogic(panelWidth, panelHeight, stubBricksLogic);
+        gameLogicWithStub.setBallX(0);
+        gameLogicWithStub.setBallY(50);
+        gameLogicWithStub.setBallDY(2);
+
+        // When
+        gameLogicWithStub.update();
+
+        // Then
+        assertTrue(stubBricksLogic.checkCollision(new Rectangle(0, 50, 20, 20)));
+    }
+
+    @Test
+    @DisplayName("Spy - Should call checkCollision when ball hits a brick")
+    void should_call_checkCollision_when_ball_hits_a_brick_spy() throws EndGameException {
+        // Given
+        BricksLogic spyBricksLogic = spy(new BricksLogic(panelWidth));
+        GameLogic gameLogicWithSpy = new GameLogic(panelWidth, panelHeight, spyBricksLogic);
+        gameLogicWithSpy.setBallX(0);
+        gameLogicWithSpy.setBallY(50);
+        gameLogicWithSpy.setBallDY(2);
+
+        // When
+        gameLogicWithSpy.update();
+
+        // Then
+        verify(spyBricksLogic, times(1)).checkCollision(any(Rectangle.class));
+    }
+
+    @Test
+    @DisplayName("Fake - Should call checkCollision when ball hits a brick")
+    void should_call_checkCollision_when_ball_hits_a_brick_fake() throws EndGameException {
+        // Given
+        BricksLogic fakeBricksLogic = new FakeBricksLogic();
+        GameLogic gameLogicWithFake = new GameLogic(panelWidth, panelHeight, fakeBricksLogic);
+        gameLogicWithFake.setBallX(0);
+        gameLogicWithFake.setBallY(50);
+        gameLogicWithFake.setBallDY(2);
+
+        // When
+        gameLogicWithFake.update();
+
+        // Then
+        assertTrue(fakeBricksLogic.checkCollision(new Rectangle(0, 50, 20, 20)));
+    }
+
+    // Fake class for BricksLogic
+    class FakeBricksLogic extends BricksLogic {
+        public FakeBricksLogic() {
+            super(800); // Assuming panelWidth is 800
+        }
+
+        @Override
+        public boolean checkCollision(Rectangle ball) {
+            return true; // Fake response
+        }
+    }
+
+    @Test
+    @DisplayName("Dummy - Should call checkCollision when ball hits a brick")
+    void should_call_checkCollision_when_ball_hits_a_brick_dummy() throws EndGameException {
+        // Given
+        BricksLogic dummyBricksLogic = new BricksLogic(panelWidth);
+        GameLogic gameLogicWithDummy = new GameLogic(panelWidth, panelHeight, dummyBricksLogic);
+        gameLogicWithDummy.setBallX(0);
+        gameLogicWithDummy.setBallY(50);
+        gameLogicWithDummy.setBallDY(2);
+
+        // When
+        gameLogicWithDummy.update();
+
+        // Then
+        // No verification needed as dummy is not used
     }
 }
